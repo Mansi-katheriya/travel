@@ -1,1 +1,175 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Together | Find Your Perfect Travel Buddy</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="MyTrip.css" />
+    <style>
+ /* Header */
+ header {
+        text-align: center;
+        padding: 30px 0;
+        background: rgba(255, 255, 255, 0.7);
+        margin: 70px auto;
+      }
+
+      header h2 {
+        color: #007bff;
+        margin: 0;
+      }
+
+      /* Trips Container */
+      .trips-container {
+        width: 90%;
+        max-width: 700px;
+        margin: 100px auto;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      /* Trip Category */
+      .trip-category {
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(0, 123, 255, 0.1);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .trip-category h3 {
+        color: #007bff;
+        margin-bottom: 10px;
+      }
+
+      </style>
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <body>
+    <!-- Responsive Navbar Start -->
+    <nav class="navbar">
+      <div class="logo">Travel Together</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buddy_column.html">Buddy Column</a></li>
+        <li><a href="mytrip.html">My Trips</a></li>
+        <li><a href="profile-setup.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="login_signup.html">Login/SignUp</a></li>
+      </ul>
+      <div
+        class="menu-icon"
+        onclick="toggleMenu()"
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </div>
+    </nav>
+    <!-- Responsive Navbar End -->
+    <!-- <header>
+      <h2>My Trips</h2>
+      <p>Track your travel history and upcoming adventures.</p>
+    </header> -->
+
+    <!-- TRIPS SECTION -->
+    <section class="trips-container">
+      <h2>My Trips</h2>
+      <p>Track your travel history and upcoming adventures.</p>
+      <div class="trip-category">
+        <h3>Upcoming Trips</h3>
+        <ul id="upcoming-trips"></ul>
+      </div>
+
+      <div class="trip-category">
+        <h3>Past Trips</h3>
+        <ul id="past-trips"></ul>
+      </div>
+
+      <div class="trip-category">
+        <h3>Saved Destinations</h3>
+        <ul id="saved-destinations"></ul>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 Travel Together. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="social-icons">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const upcomingTripsContainer =
+          document.getElementById("upcoming-trips");
+        const pastTripsContainer = document.getElementById("past-trips");
+        const savedDestinationsContainer =
+          document.getElementById("saved-destinations");
+
+        // Dummy Trips Data
+        const trips = [
+          {
+            destination: "Manali",
+            date: "15th April 2025",
+            status: "Upcoming",
+          },
+          { destination: "Goa", date: "20th March 2025", status: "Completed" },
+          { destination: "Jaipur", date: "5th May 2025", status: "Upcoming" },
+        ];
+
+        const savedDestinations = ["Switzerland", "Bali", "Maldives"];
+
+        function displayTrips() {
+          upcomingTripsContainer.innerHTML = "";
+          pastTripsContainer.innerHTML = "";
+          savedDestinationsContainer.innerHTML = "";
+
+          trips.forEach((trip, index) => {
+            const tripElement = document.createElement("li");
+            tripElement.innerHTML = `${trip.destination} - ${trip.date} <button onclick="removeTrip(${index})">Remove</button>`;
+
+            if (trip.status === "Upcoming") {
+              upcomingTripsContainer.appendChild(tripElement);
+            } else {
+              pastTripsContainer.appendChild(tripElement);
+            }
+          });
+
+          savedDestinations.forEach((destination) => {
+            const destinationElement = document.createElement("li");
+            destinationElement.textContent = destination;
+            savedDestinationsContainer.appendChild(destinationElement);
+          });
+        }
+
+        // Remove Trip Function
+        window.removeTrip = function (index) {
+          trips.splice(index, 1);
+          displayTrips();
+        };
+
+        displayTrips();
+      });
+      function toggleMenu() {
+        const navLinks = document.getElementById("navLinks");
+        navLinks.classList.toggle("show");
+      }
+    </script>
+
+    <script src="MyTrip.js"></script>
+  </body>
+</html>
