@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nearby Travelers Finder</title>
+    <style>
+      /* General Styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+
+      .location-container {
+        width: 90%;
+        max-width: 600px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #007bff;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+        margin: 5px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      input[type="text"] {
+        width: 80%;
+        padding: 8px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      #traveler-list {
+        margin-top: 10px;
+        padding: 10px;
+        background: #e6f2ff;
+        border-radius: 5px;
+      }
+
+      #traveler-list ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      #traveler-list li {
+        background: #ffffff;
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: 0.3s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      #traveler-list li:hover {
+        background: #cce0ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="location-container">
+      <h2>Find Nearby Travelers</h2>
+      <button onclick="getLocation()">📍 Use My Location</button>
+      <input type="text" id="manualLocation" placeholder="Enter location..." />
+      <button onclick="findTravelers()">Search</button>
+      <p id="status"></p>
+      <div id="traveler-list"></div>
+    </div>
+
+    <script>
+      function getLocation() {
+        if (navigator.geolocation) {
+          document.getElementById("status").innerText = "Fetching location...";
+          navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+          document.getElementById("status").innerText =
+            "Geolocation not supported by your browser.";
+        }
+      }
+
+      function showPosition(position) {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        document.getElementById(
+          "status"
+        ).innerText = `Detected Location: Lat ${lat}, Lon ${lon}`;
+        findTravelers(lat, lon);
+      }
+
+      function showError(error) {
+        let errorMsg = "Unable to retrieve location.";
+        if (error.code === 1) errorMsg = "User denied location access.";
+        else if (error.code === 2) errorMsg = "Location unavailable.";
+        else if (error.code === 3) errorMsg = "Request timed out.";
+        document.getElementById("status").innerText = errorMsg;
+      }
+
+      function findTravelers(lat = null, lon = null) {
+        let location = document.getElementById("manualLocation").value.trim();
+        if (lat && lon) {
+          location = `Lat: ${lat}, Lon: ${lon}`;
+        }
+        if (location === "") {
+          document.getElementById("status").innerText =
+            "Please enter a location.";
+          return;
+        }
+        document.getElementById("traveler-list").innerHTML = `
+                <p>Showing travelers near <strong>${location}</strong>...</p>
+                <ul>
+                    <li>Rahul (Backpacker) - ${location}</li>
+                    <li>Pooja (Solo Traveler) - ${location}</li>
+                    <li>Amit (Adventure Seeker) - ${location}</li>
+                </ul>
+            `;
+      }
+    </script>
+  </body>
+</html>

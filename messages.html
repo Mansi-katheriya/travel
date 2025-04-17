@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Together | Find Your Perfect Travel Buddy</title>
+    <link rel="stylesheet" href="index.css" />
+
+    
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <style>
+     :root {
+        --bg-light: #f1f1f1;
+        --bg-dark: #121212;
+        --text-light: #333;
+        --text-dark: #f9f9f9;
+        --bubble-light: #e0f7fa;
+        --bubble-dark: #1f2d3d;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: var(--bg-light);
+        color: var(--text-light);
+        transition: background 0.3s, color 0.3s;
+      }
+
+      body.dark {
+        background-color: var(--bg-dark);
+        color: var(--text-dark);
+      }
+
+      .chat-container {
+        max-width: 600px;
+        margin: 7rem auto;
+        padding: 1rem;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .theme-toggle {
+        padding: 5px 10px;
+        cursor: pointer;
+        background: #0072ff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+
+      .messages {
+        height: 300px;
+        max-height: 400px;
+        overflow-y: scroll;
+        padding: 10px;
+        background: #fafafa;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .message {
+        display: flex;
+        align-items: flex-start;
+        margin: 10px 0;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .bubble {
+        padding: 10px;
+        border-radius: 15px;
+        max-width: 70%;
+        background: var(--bubble-light);
+      }
+
+      body.dark .bubble {
+        background: var(--bubble-dark);
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        padding: 10px 20px;
+        background: #0072ff;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+
+  <body>
+    <!-- Responsive Navbar Start -->
+    <nav class="navbar">
+      <div class="logo">Travel Together</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buddy_column.html">Buddy Column</a></li>
+        <li><a href="mytrip.html">My Trips</a></li>
+        <li><a href="profile-setup.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="login_signup.html">Login/SignUp</a></li>
+      </ul>
+      <div
+        class="menu-icon"
+        onclick="toggleMenu()"
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </div>
+    </nav>
+    <!-- Responsive Navbar End -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <h3>Chat Room</h3>
+        
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Theme</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="input-group">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Type your message..."
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+
+  </body>
+
+  
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Travel Together. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="social-icons">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
+      </div>
+    </footer>
+</html>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        onSnapshot,
+        serverTimestamp,
+        query,
+        orderBy,
+      } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCT7WM5WnQH919zDIxGHCkX7FPi7MPFBZM",
+        authDomain: "traveltogether-6df8b.firebaseapp.com",
+        projectId: "traveltogether-6df8b",
+        storageBucket: "traveltogether-6df8b.appspot.com",
+        messagingSenderId: "520109472790",
+        appId: "1:520109472790:web:4aa822c15b106710218937",
+        measurementId: "G-6HJSR2LZL6",
+      };
+
+      let app, db;
+      try {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+      }
+
+      const messagesRef = collection(db, "messages");
+
+      let userName = localStorage.getItem("userName");
+      if (!userName) {
+        userName = prompt("Enter your name:") || "Traveler";
+        localStorage.setItem("userName", userName);
+      }
+
+      const avatarUrl = `https://api.dicebear.com/6.x/personas/svg?seed=${encodeURIComponent(
+        userName
+      )}`;
+      const messagesContainer = document.getElementById("messages");
+
+      const q = query(messagesRef, orderBy("timestamp"));
+      onSnapshot(
+        q,
+        (snapshot) => {
+          messagesContainer.innerHTML = "";
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "message";
+            msgDiv.innerHTML = `
+          <img src="${data.avatar}" class="avatar" alt="avatar"/>
+          <div class="bubble"><strong>${data.user}:</strong> ${data.text}</div>
+        `;
+            messagesContainer.appendChild(msgDiv);
+          });
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        },
+        (error) => {
+          console.error("Error loading messages:", error);
+        }
+      );
+
+      window.sendMessage = async () => {
+        const input = document.getElementById("messageInput");
+        const message = input.value.trim();
+        if (!message) return;
+
+        try {
+          await addDoc(messagesRef, {
+            user: userName,
+            text: message,
+            avatar: avatarUrl,
+            timestamp: serverTimestamp(),
+          });
+          input.value = "";
+        } catch (error) {
+          console.error("Error sending message:", error);
+        }
+      };
+
+      window.toggleTheme = () => {
+        document.body.classList.toggle("dark");
+      };
+    </script>

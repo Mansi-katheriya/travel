@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Together | Find Your Perfect Travel Buddy</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="nav.css" />
+
+    
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <body>
+    <!-- Responsive Navbar Start -->
+    <nav class="navbar">
+      <div class="logo">Travel Together</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buddy_column.html">Buddy Column</a></li>
+        <li><a href="mytrip.html">My Trips</a></li>
+        <li><a href="profile-setup.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="login_signup.html">Login/SignUp</a></li>
+      </ul>
+      <div
+        class="menu-icon"
+        onclick="toggleMenu()"
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </div>
+    </nav>
+
+    <div class="container">
+      <button class="btn" id="openPreferences">✏️ Enter Preferences</button>
+
+      <div class="chat-box">
+        <h4>💬 Chat with Buddy</h4>
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Type a message..." />
+        <button class="btn" id="sendMessage">Send</button>
+      </div>
+
+      <div class="itinerary-section">
+        <h2>📅 Share & Collaborate on Itinerary</h2>
+        <input type="date" id="start-date" />
+        <input type="date" id="end-date" />
+        <input
+          type="text"
+          id="trip-destinations"
+          placeholder="Destinations (e.g., Manali, Shimla, Kasol)"
+        />
+        <textarea
+          id="collaboration-notes"
+          rows="4"
+          placeholder="Add notes (who is booking hotel, local spots to explore, etc.)"
+        ></textarea>
+        <button class="btn" id="submitItinerary">📤 Share Itinerary</button>
+      </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        const navLinks = document.getElementById("navLinks");
+        navLinks.classList.toggle("show");
+      }
+
+      function showModal() {
+        let modal = document.createElement("div");
+        modal.className = "modal";
+        modal.innerHTML = `
+        <div class="modal-content">
+          <h3>Enter Preferences</h3>
+          <input type='text' placeholder='Preferred Destination' style='width:100%;padding:10px;margin:10px 0;'>
+          <button class="btn" id="closeModal">Close</button>
+        </div>
+      `;
+        document.body.appendChild(modal);
+        document
+          .getElementById("closeModal")
+          .addEventListener("click", () => modal.remove());
+      }
+
+      function appendChatMessage(message) {
+        let chatBox = document.getElementById("chat-messages");
+        let newMessage = document.createElement("p");
+        newMessage.textContent = `You: ${message}`;
+        chatBox.appendChild(newMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      function handleItinerarySubmit() {
+        let startDate = document.getElementById("start-date").value;
+        let endDate = document.getElementById("end-date").value;
+        let destinations = document.getElementById("trip-destinations").value;
+        if (!startDate || !endDate || !destinations) {
+          alert("Please fill all required fields.");
+          return;
+        }
+        if (new Date(endDate) < new Date(startDate)) {
+          alert("End date cannot be before start date!");
+          return;
+        }
+        alert("Itinerary Shared Successfully!");
+      }
+
+      document
+        .getElementById("openPreferences")
+        .addEventListener("click", showModal);
+
+      document
+        .getElementById("sendMessage")
+        .addEventListener("click", function () {
+          let message = document.getElementById("chat-input").value.trim();
+          if (message) {
+            appendChatMessage(message);
+            document.getElementById("chat-input").value = "";
+          }
+        });
+
+      document
+        .getElementById("submitItinerary")
+        .addEventListener("click", handleItinerarySubmit);
+    </script>
+  </body>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Travel Together. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="social-icons">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+    </div>
+  </footer>
+</html>

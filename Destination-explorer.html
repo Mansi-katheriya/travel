@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Destination Explorer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      h2 {
+        text-align: center;
+        background-color: #4caf50;
+        color: white;
+        margin: 0;
+        padding: 1rem;
+        font-size: 2rem;
+      }
+
+      .filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .filters input,
+      .filters select {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        min-width: 200px;
+      }
+
+      .state-section {
+        margin: 2rem;
+      }
+
+      .state-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+        border-bottom: 2px solid #4caf50;
+        padding-bottom: 0.25rem;
+      }
+
+      .card-container {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1rem;
+        padding: 1rem 0;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 250px;
+        max-width: 250px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        transition: transform 0.2s ease;
+        position: relative;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+      }
+
+      .card-content {
+        padding: 0.75rem 1rem;
+      }
+
+      .card-content h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #333;
+      }
+
+      .card-content p {
+        font-size: 0.95rem;
+        color: #666;
+      }
+
+      .fav-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        font-size: 18px;
+        color: #aaa;
+      }
+
+      .fav-btn.active {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Destination Explorer</h2>
+
+    <div class="filters">
+      <input
+        type="text"
+        placeholder="Search by city..."
+        class="search-input"
+        id="searchInput"
+      />
+      <select class="type-filter" id="typeFilter">
+        <option value="">All Travel Types</option>
+        <option value="beach">Beach</option>
+        <option value="hill">Hill Station</option>
+        <option value="heritage">Heritage</option>
+        <option value="adventure">Adventure</option>
+      </select>
+    </div>
+
+    <div id="all-states-container"></div>
+
+    <script>
+      const states = {
+        "Andhra Pradesh": [
+          {
+            city: "Visakhapatnam",
+            type: "beach",
+            desc: "Port city with beaches.",
+            img: "https://source.unsplash.com/250x150/?visakhapatnam",
+          },
+          {
+            city: "Araku Valley",
+            type: "hill",
+            desc: "Coffee plantations and waterfalls.",
+            img: "https://source.unsplash.com/250x150/?araku",
+          },
+          {
+            city: "Tirupati",
+            type: "heritage",
+            desc: "Famous pilgrimage site.",
+            img: "https://source.unsplash.com/250x150/?tirupati",
+          },
+        ],
+        "Arunachal Pradesh": [
+          {
+            city: "Tawang",
+            type: "hill",
+            desc: "Monasteries and scenic beauty.",
+            img: "https://source.unsplash.com/250x150/?tawang",
+          },
+          {
+            city: "Ziro Valley",
+            type: "hill",
+            desc: "Pine hills and rice fields.",
+            img: "https://source.unsplash.com/250x150/?ziro-valley",
+          },
+        ],
+        Assam: [
+          {
+            city: "Kaziranga",
+            type: "adventure",
+            desc: "National park with rhinos.",
+            img: "https://source.unsplash.com/250x150/?kaziranga",
+          },
+          {
+            city: "Majuli",
+            type: "heritage",
+            desc: "World’s largest river island.",
+            img: "https://source.unsplash.com/250x150/?majuli",
+          },
+        ],
+        Bihar: [
+          {
+            city: "Bodh Gaya",
+            type: "heritage",
+            desc: "Buddhist pilgrimage site.",
+            img: "https://source.unsplash.com/250x150/?bodhgaya",
+          },
+          {
+            city: "Rajgir",
+            type: "heritage",
+            desc: "Historical city and hot springs.",
+            img: "https://source.unsplash.com/250x150/?rajgir",
+          },
+        ],
+        Chhattisgarh: [
+          {
+            city: "Chitrakote Falls",
+            type: "adventure",
+            desc: "India’s widest waterfall.",
+            img: "https://source.unsplash.com/250x150/?chitrakote",
+          },
+          {
+            city: "Barnawapara Wildlife Sanctuary",
+            type: "adventure",
+            desc: "Lush forest and wildlife spotting.",
+            img: "https://source.unsplash.com/250x150/?barnawapara",
+          },
+          {
+            city: "Sirpur",
+            type: "heritage",
+            desc: "Ancient temples and archaeology.",
+            img: "https://source.unsplash.com/250x150/?sirpur",
+          },
+        ],
+        Goa: [
+          {
+            city: "Calangute",
+            type: "beach",
+            desc: "Famous for its vibrant beach scene.",
+            img: "https://source.unsplash.com/250x150/?calangute",
+          },
+          {
+            city: "Panaji",
+            type: "heritage",
+            desc: "Portuguese heritage and riverside walks.",
+            img: "https://source.unsplash.com/250x150/?panaji",
+          },
+          {
+            city: "Dudhsagar Falls",
+            type: "adventure",
+            desc: "Spectacular waterfall and trekking.",
+            img: "https://source.unsplash.com/250x150/?dudhsagar",
+          },
+        ],
+        Gujarat: [
+          {
+            city: "Gir National Park",
+            type: "adventure",
+            desc: "Home to Asiatic lions.",
+            img: "https://source.unsplash.com/250x150/?gir",
+          },
+          {
+            city: "Rann of Kutch",
+            type: "heritage",
+            desc: "Salt desert with vibrant culture.",
+            img: "https://source.unsplash.com/250x150/?rann",
+          },
+        ],
+        Haryana: [
+          {
+            city: "Kurukshetra",
+            type: "heritage",
+            desc: "Mythological city from Mahabharata.",
+            img: "https://source.unsplash.com/250x150/?kurukshetra",
+          },
+          {
+            city: "Pinjore Gardens",
+            type: "heritage",
+            desc: "Mughal-style terraced garden.",
+            img: "https://source.unsplash.com/250x150/?pinjore",
+          },
+        ],
+        "Himachal Pradesh": [
+          {
+            city: "Shimla",
+            type: "hill",
+            desc: "Colonial charm in the hills.",
+            img: "https://source.unsplash.com/250x150/?shimla",
+          },
+          {
+            city: "Manali",
+            type: "hill",
+            desc: "Snow-capped mountains and rivers.",
+            img: "https://source.unsplash.com/250x150/?manali",
+          },
+        ],
+        Jharkhand: [
+          {
+            city: "Ranchi",
+            type: "hill",
+            desc: "City of waterfalls.",
+            img: "https://source.unsplash.com/250x150/?ranchi",
+          },
+          {
+            city: "Netarhat",
+            type: "hill",
+            desc: "Scenic plateau and sunrise views.",
+            img: "https://source.unsplash.com/250x150/?netarhat",
+          },
+        ],
+        Karnataka: [
+          {
+            city: "Coorg",
+            type: "hill",
+            desc: "Coffee plantations and misty hills.",
+            img: "https://source.unsplash.com/250x150/?coorg",
+          },
+          {
+            city: "Hampi",
+            type: "heritage",
+            desc: "Ancient ruins and temples.",
+            img: "https://source.unsplash.com/250x150/?hampi",
+          },
+        ],
+        Kerala: [
+          {
+            city: "Munnar",
+            type: "hill",
+            desc: "Tea gardens and cool climate.",
+            img: "https://source.unsplash.com/250x150/?munnar",
+          },
+          {
+            city: "Alleppey",
+            type: "beach",
+            desc: "Famous for backwaters.",
+            img: "https://source.unsplash.com/250x150/?alleppey",
+          },
+        ],
+        "Madhya Pradesh": [
+          {
+            city: "Khajuraho",
+            type: "heritage",
+            desc: "Famous erotic temples.",
+            img: "https://source.unsplash.com/250x150/?khajuraho",
+          },
+          {
+            city: "Pachmarhi",
+            type: "hill",
+            desc: "Satpura hill station.",
+            img: "https://source.unsplash.com/250x150/?pachmarhi",
+          },
+        ],
+        Maharashtra: [
+          {
+            city: "Lonavala",
+            type: "hill",
+            desc: "Weekend getaway near Mumbai.",
+            img: "https://source.unsplash.com/250x150/?lonavala",
+          },
+          {
+            city: "Ajanta Caves",
+            type: "heritage",
+            desc: "Ancient Buddhist rock-cut caves.",
+            img: "https://source.unsplash.com/250x150/?ajanta",
+          },
+        ],
+        Manipur: [
+          {
+            city: "Imphal",
+            type: "heritage",
+            desc: "Historic and cultural center.",
+            img: "https://source.unsplash.com/250x150/?imphal",
+          },
+          {
+            city: "Loktak Lake",
+            type: "adventure",
+            desc: "Floating lake and phumdis.",
+            img: "https://source.unsplash.com/250x150/?loktak",
+          },
+        ],
+        Meghalaya: [
+          {
+            city: "Shillong",
+            type: "hill",
+            desc: "Scotland of the East.",
+            img: "https://source.unsplash.com/250x150/?shillong",
+          },
+          {
+            city: "Cherrapunji",
+            type: "hill",
+            desc: "One of the wettest places.",
+            img: "https://source.unsplash.com/250x150/?cherrapunji",
+          },
+        ],
+        Mizoram: [
+          {
+            city: "Aizawl",
+            type: "hill",
+            desc: "Hilly capital city.",
+            img: "https://source.unsplash.com/250x150/?aizawl",
+          },
+        ],
+        Nagaland: [
+          {
+            city: "Kohima",
+            type: "heritage",
+            desc: "Tribal heritage and WW2 history.",
+            img: "https://source.unsplash.com/250x150/?kohima",
+          },
+        ],
+        Odisha: [
+          {
+            city: "Puri",
+            type: "heritage",
+            desc: "Famous Jagannath temple and beach.",
+            img: "https://source.unsplash.com/250x150/?puri",
+          },
+          {
+            city: "Konark",
+            type: "heritage",
+            desc: "Sun Temple marvel.",
+            img: "https://source.unsplash.com/250x150/?konark",
+          },
+        ],
+        Punjab: [
+          {
+            city: "Amritsar",
+            type: "heritage",
+            desc: "Golden Temple city.",
+            img: "https://source.unsplash.com/250x150/?amritsar",
+          },
+        ],
+        Rajasthan: [
+          {
+            city: "Jaipur",
+            type: "heritage",
+            desc: "Pink City of India.",
+            img: "https://source.unsplash.com/250x150/?jaipur",
+          },
+          {
+            city: "Udaipur",
+            type: "heritage",
+            desc: "City of lakes.",
+            img: "https://source.unsplash.com/250x150/?udaipur",
+          },
+        ],
+        Sikkim: [
+          {
+            city: "Gangtok",
+            type: "hill",
+            desc: "Modern hill capital.",
+            img: "https://source.unsplash.com/250x150/?gangtok",
+          },
+        ],
+        "Tamil Nadu": [
+          {
+            city: "Ooty",
+            type: "hill",
+            desc: "Popular hill retreat.",
+            img: "https://source.unsplash.com/250x150/?ooty",
+          },
+          {
+            city: "Mahabalipuram",
+            type: "heritage",
+            desc: "Shore temples and sculptures.",
+            img: "https://source.unsplash.com/250x150/?mahabalipuram",
+          },
+        ],
+        Telangana: [
+          {
+            city: "Hyderabad",
+            type: "heritage",
+            desc: "City of pearls and biryani.",
+            img: "https://source.unsplash.com/250x150/?hyderabad",
+          },
+        ],
+        Tripura: [
+          {
+            city: "Agartala",
+            type: "heritage",
+            desc: "Royal palaces and temples.",
+            img: "https://source.unsplash.com/250x150/?agartala",
+          },
+        ],
+        "Uttar Pradesh": [
+          {
+            city: "Varanasi",
+            type: "heritage",
+            desc: "Spiritual capital of India.",
+            img: "https://source.unsplash.com/250x150/?varanasi",
+          },
+          {
+            city: "Agra",
+            type: "heritage",
+            desc: "Home to Taj Mahal.",
+            img: "https://source.unsplash.com/250x150/?agra",
+          },
+        ],
+        Uttarakhand: [
+          {
+            city: "Nainital",
+            type: "hill",
+            desc: "Lake district of India.",
+            img: "https://source.unsplash.com/250x150/?nainital",
+          },
+          {
+            city: "Rishikesh",
+            type: "adventure",
+            desc: "Yoga and river rafting.",
+            img: "https://source.unsplash.com/250x150/?rishikesh",
+          },
+        ],
+        "West Bengal": [
+          {
+            city: "Darjeeling",
+            type: "hill",
+            desc: "Tea gardens and toy train.",
+            img: "https://source.unsplash.com/250x150/?darjeeling",
+          },
+          {
+            city: "Kolkata",
+            type: "heritage",
+            desc: "Cultural capital of India.",
+            img: "https://source.unsplash.com/250x150/?kolkata",
+          },
+        ],
+      };
+
+      const allStatesContainer = document.getElementById(
+        "all-states-container"
+      );
+      let favorites = new Set();
+
+      function renderCards(filterCity = "", filterType = "") {
+        allStatesContainer.innerHTML = "";
+        for (let state in states) {
+          const stateDestinations = states[state].filter((place) => {
+            const matchesCity = place.city
+              .toLowerCase()
+              .includes(filterCity.toLowerCase());
+            const matchesType = filterType === "" || place.type === filterType;
+            return matchesCity && matchesType;
+          });
+
+          if (stateDestinations.length > 0) {
+            const section = document.createElement("div");
+            section.className = "state-section";
+
+            const title = document.createElement("div");
+            title.className = "state-title";
+            title.textContent = state;
+            section.appendChild(title);
+
+            const container = document.createElement("div");
+            container.className = "card-container";
+
+            stateDestinations.forEach((place) => {
+              const card = document.createElement("div");
+              card.className = "card";
+              const isFav = favorites.has(place.city);
+              card.innerHTML = `
+              <button class="fav-btn ${isFav ? "active" : ""}" data-city="${
+                place.city
+              }">&#10084;</button>
+              <img src="${place.img}" alt="${place.city}">
+              <div class="card-content">
+                <h3>${place.city}</h3>
+                <p>${place.desc}</p>
+              </div>
+            `;
+              container.appendChild(card);
+            });
+
+            section.appendChild(container);
+            allStatesContainer.appendChild(section);
+          }
+        }
+
+        document.querySelectorAll(".fav-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const city = btn.dataset.city;
+            if (favorites.has(city)) {
+              favorites.delete(city);
+            } else {
+              favorites.add(city);
+            }
+            renderCards(
+              document.getElementById("searchInput").value,
+              document.getElementById("typeFilter").value
+            );
+          });
+        });
+      }
+
+      document.getElementById("searchInput").addEventListener("input", (e) => {
+        renderCards(
+          e.target.value,
+          document.getElementById("typeFilter").value
+        );
+      });
+
+      document.getElementById("typeFilter").addEventListener("change", (e) => {
+        renderCards(
+          document.getElementById("searchInput").value,
+          e.target.value
+        );
+      });
+
+      renderCards();
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Destination Explorer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      h2 {
+        text-align: center;
+        background-color: #4caf50;
+        color: white;
+        margin: 0;
+        padding: 1rem;
+        font-size: 2rem;
+      }
+
+      .filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .filters input,
+      .filters select {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        min-width: 200px;
+      }
+
+      .state-section {
+        margin: 2rem;
+      }
+
+      .state-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+        border-bottom: 2px solid #4caf50;
+        padding-bottom: 0.25rem;
+      }
+
+      .card-container {
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem;
+        padding: 1rem 0;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 250px;
+        max-width: 250px;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+        position: relative;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+      }
+
+      .card-content {
+        padding: 0.75rem 1rem;
+      }
+
+      .card-content h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #333;
+      }
+
+      .card-content p {
+        font-size: 0.95rem;
+        color: #666;
+      }
+
+      .fav-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        font-size: 18px;
+        color: #aaa;
+      }
+
+      .fav-btn.active {
+        color: red;
+      }
+    </style>
+  </head>
+</html>

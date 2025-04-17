@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Together | Find Your Perfect Travel Buddy</title>
+    <link rel="stylesheet" href="index.css" />
+
+    
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <style>
+    
+     .form-container {
+        background: rgba(255, 255, 255, 0.9);
+        max-width: 450px;
+        margin: 6rem auto;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #003366;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 1.2rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #0072ff, #00c6ff);
+      }
+
+      @media (max-width: 600px) {
+        nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .form-container {
+          margin: 2rem 1rem;
+        }
+      }
+    </style>
+
+  <body>
+    <!-- Responsive Navbar Start -->
+    <nav class="navbar">
+      <div class="logo">Travel Together</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buddy_column.html">Buddy Column</a></li>
+        <li><a href="mytrip.html">My Trips</a></li>
+        <li><a href="profile-setup.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="login_signup.html">Login/SignUp</a></li>
+      </ul>
+      <div
+        class="menu-icon"
+        onclick="toggleMenu()"
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </div>
+    </nav>
+    <!-- Responsive Navbar End -->
+    <div class="form-container">
+      <h2>Profile Setup</h2>
+      <form id="profileForm">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required />
+
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="age">Age</label>
+        <input type="number" id="age" required />
+
+        <label for="location">Location</label>
+        <input type="text" id="location" required />
+
+        <label for="destination">Preferred Destination</label>
+        <input type="text" id="destination" required />
+
+        <label for="travelDate">Travel Dates</label>
+        <input type="date" id="travelDate" required />
+
+        <label for="interests">Interests</label>
+        <textarea
+          id="interests"
+          rows="3"
+          placeholder="e.g., trekking, beaches, historical places..."
+          required
+        ></textarea>
+
+        <button type="submit">Continue</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("profileForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("fullName").value;
+          alert("Profile setup successful, " + name + "!");
+          // You can redirect or save the data here
+        });
+    </script>
+  </body>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Travel Together. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="social-icons">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+    </div>
+  </footer>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Together | Find Your Perfect Travel Buddy</title>
+    <link rel="stylesheet" href="index.css" />
+  
+    <link rel="icon" href="favicon.png" type="image/png" />
+  </head>
+  <body>
+    <!-- Responsive Navbar Start -->
+    <nav class="navbar">
+      <div class="logo">Travel Together</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="buddy_column.html">Buddy Column</a></li>
+        <li><a href="mytrip.html">My Trips</a></li>
+        <li><a href="profile-setup.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="login_signup.html">Login/SignUp</a></li>
+      </ul>
+      <div
+        class="menu-icon"
+        onclick="toggleMenu()"
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </div>
+    </nav>
+    <!-- Responsive Navbar End -->
+
+    <!-- Hero Section -->
+    <header class="intro">
+      <h2>Find Your Perfect Travel Buddy!</h2>
+      <p>Connect, travel, and share memories with like-minded travelers.</p>
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by interest or name"
+        />
+        <button id="searchBtn">Search</button>
+      </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="feature">
+        <h3>Travel Buddy Match</h3>
+        <p>AI-based matching to find ideal travel partners.</p>
+      </div>
+      <div class="feature">
+        <h3>Safety First</h3>
+        <p>
+          In-app SOS alerts, emergency contacts, and live location sharing for
+          your safety.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>Location-Based Info</h3>
+        <p>Know who’s traveling around your current or future destination.</p>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">1. Sign Up & Create Profile</div>
+        <div class="step">2. Set Your Travel Preferences</div>
+        <div class="step">3. Match & Chat with Travelers</div>
+        <div class="step">4. Plan & Enjoy Your Trip!</div>
+      </div>
+    </section>
+
+    <!-- Safety Info Section -->
+    <section class="safety">
+      <h2>Your Safety is Our Priority</h2>
+      <ul>
+        <li>Live Location Sharing</li>
+        <li>Emergency Contacts</li>
+        <li>SOS Alert Button</li>
+      </ul>
+      <button class="learn-more" id="learnMoreBtn">Learn More</button>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button
+      onclick="scrollToTop()"
+      class="scrollTopBtn"
+      aria-label="Scroll to top"
+    >
+      ↑
+    </button>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Travel Together. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="social-icons">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
+      </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="script.js"></script>
+  </body>
+</html>

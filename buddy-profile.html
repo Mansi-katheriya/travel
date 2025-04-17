@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buddy Profile - Tanisha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --bg-color: #f3f8f5;
+        --text-color: #333;
+        --card-bg: #fff;
+        --section-title: #333;
+      }
+
+      body.dark-mode {
+        --bg-color: #1e1e1e;
+        --text-color: #eee;
+        --card-bg: #2c2c2c;
+        --section-title: #fff;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        background: #2e7d32;
+        color: white;
+        width: 220px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        transition: width 0.3s ease;
+      }
+
+      .sidebar.collapsed {
+        width: 60px;
+        overflow: hidden;
+      }
+
+      .sidebar .icon {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .sidebar .icon i {
+        font-size: 20px;
+      }
+
+      .toggle-btn {
+        margin-bottom: 20px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .dark-toggle {
+        background: #4caf50;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 20px;
+        color: white;
+        cursor: pointer;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .profile-header img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #4caf50;
+      }
+
+      .profile-info h2 {
+        margin: 0;
+        color: var(--section-title);
+      }
+
+      .verified {
+        color: #4caf50;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+
+      .safety-score {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+
+      .safety-bar {
+        height: 10px;
+        background: #c8e6c9;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 5px;
+        width: 200px;
+      }
+
+      .safety-fill {
+        height: 100%;
+        width: 92%;
+        background: linear-gradient(to right, #81c784, #388e3c);
+      }
+
+      .location {
+        color: #777;
+      }
+
+      .bio {
+        margin-top: 15px;
+        font-style: italic;
+      }
+
+      .section {
+        margin-top: 25px;
+      }
+
+      .section h3 {
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 5px;
+        color: var(--section-title);
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .badge {
+        background: #e0f7fa;
+        color: #00796b;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+      }
+
+      .trip-list li {
+        list-style: none;
+        padding: 5px 0;
+        border-bottom: 1px dashed #ccc;
+      }
+
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .buttons button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      .chat-btn {
+        background: #4caf50;
+        color: white;
+      }
+      .follow-btn {
+        background: #2196f3;
+        color: white;
+      }
+      .add-btn {
+        background: #ff9800;
+        color: white;
+      }
+
+      .match-score {
+        margin-top: 15px;
+        text-align: center;
+      }
+
+      .match-score .badge {
+        background: #dcedc8;
+        color: #558b2f;
+        padding: 8px 20px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .match-bar {
+        margin-top: 10px;
+        background: #ddd;
+        border-radius: 20px;
+        height: 20px;
+        overflow: hidden;
+      }
+
+      .match-bar-fill {
+        width: 85%;
+        background: linear-gradient(to right, #66bb6a, #43a047);
+        height: 100%;
+      }
+
+      .match-explanation {
+        margin-top: 15px;
+        background: #f9fbe7;
+        padding: 15px;
+        border-left: 5px solid #cddc39;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          height: 100%;
+          z-index: 999;
+          left: 0;
+          top: 0;
+        }
+
+        .container {
+          margin-left: 60px;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar" id="sidebar">
+      <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+      <div class="icon"><i>👤</i> <span>Profile</span></div>
+      <div class="icon"><i>🧭</i> <span>Explore</span></div>
+      <div class="icon"><i>💬</i> <span>Messages</span></div>
+      <div class="icon"><i>🛡️</i> <span>Safety</span></div>
+      <div class="icon"><i>⚙️</i> <span>Settings</span></div>
+      <button class="dark-toggle" onclick="toggleDarkMode()">
+        🌙 Dark Mode
+      </button>
+    </div>
+
+    <div class="container">
+      <div class="profile-header">
+        <img src="https://i.imgur.com/6VBx3io.png" alt="Tanisha" />
+        <div class="profile-info">
+          <h2>Tanisha Agrawal</h2>
+          <div class="verified">✔ Verified</div>
+          <div class="safety-score">Safety Score: 92%</div>
+          <div class="safety-bar">
+            <div class="safety-fill"></div>
+          </div>
+          <div class="location">Ajmer, Rajasthan</div>
+          <div class="bio">
+            Short-heighted, chubby & fair girl who loves exploring new places 💕
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Interests</h3>
+        <div class="badges">
+          <div class="badge">Badminton</div>
+          <div class="badge">Music</div>
+          <div class="badge">Traveling</div>
+          <div class="badge">Frontend Development</div>
+          <div class="badge">Designing</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Travel History</h3>
+        <ul class="trip-list">
+          <li>Manali - Feb 2024</li>
+          <li>Udaipur - Oct 2023</li>
+          <li>Jaipur - Jan 2023</li>
+          <li>Mount Abu - Dec 2022</li>
+        </ul>
+      </div>
+
+      <div class="buttons">
+        <button class="chat-btn">💬 Chat Now</button>
+        <button class="follow-btn">➕ Follow</button>
+        <button class="add-btn">👫 Add Buddy</button>
+      </div>
+
+      <div class="match-score">
+        <div class="badge">85% Match</div>
+        <div class="match-bar">
+          <div class="match-bar-fill"></div>
+        </div>
+        <div class="match-explanation">
+          You and Tanisha share similar travel interests and preferences! Great
+          compatibility for travel planning.
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+      }
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+      }
+    </script>
+  </body>
+</html>

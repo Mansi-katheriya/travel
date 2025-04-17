@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Together - Dashboard</title>
+    <link rel="stylesheet" href="index.css" />
+    <style>
+
+
+/* Dashboard layout */
+.dashboard {
+    max-width: 1200px;
+    margin: 97px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Welcome Section */
+.welcome {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.welcome h1 {
+    font-size: 2.5rem;
+    color: #34495e;
+}
+
+.welcome p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+    margin-bottom: 30px;
+}
+
+.dashboard-section h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.dashboard-section ul {
+    list-style: none;
+}
+
+.dashboard-section ul li {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+/* Buddy Suggestions and Messages */
+.dashboard-section ul li {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dashboard-section ul li:hover {
+    background-color: #bdc3c7;
+}
+
+/* Verification Status */
+.verified {
+    color: green;
+    font-weight: bold;
+}
+
+/* Quick Access Buttons */
+.quick-access button, .profile-shortcuts button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.quick-access button:hover, .profile-shortcuts button:hover {
+    background-color: #3498db;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    margin-top: 50px;
+    font-size: 1rem;
+}
+
+    </style>
+    <head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Travel Together</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="profile-setup.html">Profile</a></li>
+            <li><a href="messages.html">Messages</a></li>
+           
+        </ul>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <div  class="welcome"> 
+            <h1>Welcome, Tanisha!</h1>
+            <p>Let's explore new places and find travel buddies!</p>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Upcoming Trips</h2>
+            <ul>
+                <li>Goa - 15th April 2025</li>
+                <li>Rajasthan - 22nd May 2025</li>
+            </ul>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Buddy Suggestions</h2>
+            <ul>
+                <li>Priya - Goa, Rajasthan, Hiking</li>
+                <li>Palvi - Kerala, Beach, Photography</li>
+            </ul>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Recent Messages</h2>
+            <ul>
+                <li>Priya: "Excited for the trip to Goa!"</li>
+                <li>Tanisha: "Let's plan the itinerary for Rajasthan."</li>
+            </ul>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Verification Status</h2>
+            <p>Your profile is <span class="verified">Verified</span></p>
+        </div>
+
+        <div class="quick-access">
+            <h3>Safety Quick Access</h3>
+            <button>SOS Button</button>
+            <button>Emergency Contacts</button>
+        </div>
+
+        <div class="profile-shortcuts">
+            <h3>Profile Shortcuts</h3>
+            <button>View Profile</button>
+            <button>Edit Profile</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Travel Together. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
